@@ -211,6 +211,7 @@ public:
 	static void print(const Word& message)	{ print(message.array()); }
     static void print(int message);
 	static void print(unsigned long int message);
+	static void print(std::size_t message);
     static void print(double message, int prec = -1);
 	static void printSci(double message, int prec = -1);
 	static void print(const Words& message, bool useComma = true, bool useAnd = true);

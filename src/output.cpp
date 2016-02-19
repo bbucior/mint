@@ -678,6 +678,20 @@ void Output::print(unsigned long int message)
 
 
 
+/* void Output::print(std::size_t message)
+ *
+ * Print a std::size_t message
+ */
+
+void Output::print(std::size_t message)
+{
+	if (!_streams[_curStream].print())
+		return;
+	stream() << message << flush;
+}
+
+
+
 /* void Output::print(double message, int prec)
  *
  * Print a double message

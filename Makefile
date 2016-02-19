@@ -39,17 +39,17 @@
 
 # C++ compiler and optimization level
 # If you are compiling with MPI support then the compiler must be MPI compatible!
-CC  := #CC#
-OPT := #OPT#
+CC  := i686-w64-mingw32-g++
+OPT := -O3
 
 
 
 # Any other compiler and linker flags
 # Mint requires linking to blas/lapack libraries
-COMP   := #COMP#
-LINK   := #LINK#
-BLAS   := #BLAS#
-LAPACK := #LAPACK#
+COMP   := -g -c
+LINK   := -g -static-libgcc -static-libstdc++
+BLAS   := -L. -lblas
+LAPACK := -llapack -lgfortran
 
 
 
@@ -83,7 +83,7 @@ OBJD  := obj
 VPATH  = $(SRCD):dlib
 
 # Setup
-EXE   := mint
+EXE   := mint.exe
 FDEF  := $(addprefix -DMINT_,$(DEFINE))
 FMPI  := -DMPIRUN=\"$(MPIRUN)\"
 FVERS := -DVERSION=\"$(VERSION)\"
@@ -234,7 +234,7 @@ $(OBJD)/vasp.o : vasp.cpp multi.h num.h vasp.h kpoints.h structureIO.h language.
 
 # Linker
 $(EXE) : $(OBJD)/mint.o $(OBJD)/multi.o $(OBJD)/output.o $(OBJD)/launcher.o $(OBJD)/text.o $(OBJD)/iso.o $(OBJD)/structureIO.o $(OBJD)/symmetry.o $(OBJD)/potential.o $(OBJD)/phonons.o $(OBJD)/kmc.o $(OBJD)/diffraction.o $(OBJD)/random.o $(OBJD)/elements.o $(OBJD)/constants.o $(OBJD)/fileSystem.o $(OBJD)/mtwist.o $(OBJD)/randistrs.o $(OBJD)/language.o $(OBJD)/settings.o $(OBJD)/about.o $(OBJD)/help.o $(OBJD)/randomStructure.o $(OBJD)/unique.o $(OBJD)/pointGroup.o $(OBJD)/spaceGroup.o $(OBJD)/interstitial.o $(OBJD)/gaPredict.o $(OBJD)/pdf.o $(OBJD)/timer.o $(OBJD)/mintStructure.o $(OBJD)/crystalMaker.o $(OBJD)/vasp.o $(OBJD)/findsym.o $(OBJD)/espresso.o $(OBJD)/json.o $(OBJD)/cif.o $(OBJD)/kpoints.o $(OBJD)/locPotential.o $(OBJD)/extPotential.o $(OBJD)/bonds.o $(OBJD)/pairPotential.o $(OBJD)/ewald.o $(OBJD)/relax.o $(OBJD)/electrostatic.o
-	$(CC) $(LINK) $(BLAS) $(LAPACK) $(OPT) $(OBJD)/mint.o $(OBJD)/multi.o $(OBJD)/output.o $(OBJD)/launcher.o $(OBJD)/text.o $(OBJD)/iso.o $(OBJD)/structureIO.o $(OBJD)/symmetry.o $(OBJD)/potential.o $(OBJD)/phonons.o $(OBJD)/kmc.o $(OBJD)/diffraction.o $(OBJD)/random.o $(OBJD)/elements.o $(OBJD)/constants.o $(OBJD)/fileSystem.o $(OBJD)/mtwist.o $(OBJD)/randistrs.o $(OBJD)/language.o $(OBJD)/settings.o $(OBJD)/about.o $(OBJD)/help.o $(OBJD)/randomStructure.o $(OBJD)/unique.o $(OBJD)/pointGroup.o $(OBJD)/spaceGroup.o $(OBJD)/interstitial.o $(OBJD)/gaPredict.o $(OBJD)/pdf.o $(OBJD)/timer.o $(OBJD)/mintStructure.o $(OBJD)/crystalMaker.o $(OBJD)/vasp.o $(OBJD)/findsym.o $(OBJD)/espresso.o $(OBJD)/json.o $(OBJD)/cif.o $(OBJD)/kpoints.o $(OBJD)/locPotential.o $(OBJD)/extPotential.o $(OBJD)/bonds.o $(OBJD)/pairPotential.o $(OBJD)/ewald.o $(OBJD)/relax.o $(OBJD)/electrostatic.o -o $@
+	$(CC) $(LINK) $(OPT) $(OBJD)/mint.o $(OBJD)/multi.o $(OBJD)/output.o $(OBJD)/launcher.o $(OBJD)/text.o $(OBJD)/iso.o $(OBJD)/structureIO.o $(OBJD)/symmetry.o $(OBJD)/potential.o $(OBJD)/phonons.o $(OBJD)/kmc.o $(OBJD)/diffraction.o $(OBJD)/random.o $(OBJD)/elements.o $(OBJD)/constants.o $(OBJD)/fileSystem.o $(OBJD)/mtwist.o $(OBJD)/randistrs.o $(OBJD)/language.o $(OBJD)/settings.o $(OBJD)/about.o $(OBJD)/help.o $(OBJD)/randomStructure.o $(OBJD)/unique.o $(OBJD)/pointGroup.o $(OBJD)/spaceGroup.o $(OBJD)/interstitial.o $(OBJD)/gaPredict.o $(OBJD)/pdf.o $(OBJD)/timer.o $(OBJD)/mintStructure.o $(OBJD)/crystalMaker.o $(OBJD)/vasp.o $(OBJD)/findsym.o $(OBJD)/espresso.o $(OBJD)/json.o $(OBJD)/cif.o $(OBJD)/kpoints.o $(OBJD)/locPotential.o $(OBJD)/extPotential.o $(OBJD)/bonds.o $(OBJD)/pairPotential.o $(OBJD)/ewald.o $(OBJD)/relax.o $(OBJD)/electrostatic.o $(BLAS) $(LAPACK) -o $@
 
 # Clean
 clean:

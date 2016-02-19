@@ -32,6 +32,12 @@
 #include <sys/types.h>
 
 
+#ifdef __MINGW32__
+#define MKDIR(x) mkdir(x)
+#else
+#define MKDIR(x) mkdir(x, 0777)
+#endif
+
 
 /**
  * Read text file into memory
@@ -283,7 +289,7 @@ void Directory::create(const Word& path, bool deleteIfExists)
 		// Create the directory if it does not exist
 		if (!exists(path))
 		{
-			if (mkdir(path.array(), 0777))
+			if (MKDIR(path.array()))
 			{
 				Output::newline(ERROR);
 				Output::print("Failed to create directory: ");
