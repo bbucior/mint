@@ -1576,7 +1576,7 @@ Matrix3D ISO::primitiveTransformation(double tol, bool showOutput) const
 			}
 
 			// Check if sites map
-			areEqual = areSitesEqual(_basis, _atoms, transAtoms, tol, &(vectors[index]), &distances);
+			areEqual = areSitesEqual(_basis, _atoms, transAtoms, tol, &(vectors[index]), &distances, TT_DIST);
 		}
 		
 		// Loop over processors
@@ -2550,7 +2550,7 @@ OList<Atom>::D2 ISO::shells(const Atom* atom, double maxDistance, double tol) co
  * Return whether two structures are the same
  */
 
-bool ISO::equivalent(const ISO& compISO, double tol, bool matchVolume, bool matchCellParams) const
+bool ISO::equivalent(const ISO& compISO, double tol, bool matchVolume, bool matchCellParams, TolType matchTolType) const
 {
 	
 	// Output
@@ -2892,7 +2892,7 @@ bool ISO::equivalent(const ISO& compISO, double tol, bool matchVolume, bool matc
 				}
 			
 				// Check if atoms overlap
-				if (areSitesEqual(thisPrim.basis(), thisPrim.atoms(), transAtoms, tol, &curVec, &distances))
+				if (areSitesEqual(thisPrim.basis(), thisPrim.atoms(), transAtoms, tol, &curVec, &distances, matchTolType))
 					break;
 			}
 		
@@ -3006,7 +3006,7 @@ bool ISO::equivalent(const ISO& compISO, double tol, bool matchVolume, bool matc
  */
 
 bool ISO::areSitesEqual(const Basis& basis, const Atoms& origAtoms, const Atoms& newAtoms, double tol, \
-	Vector3D* vector, List<double>::D2* origDistances)
+	Vector3D* vector, List<double>::D2* origDistances, TolType toltype)
 {
 	
 	// Set break tolerance
@@ -3138,6 +3138,8 @@ bool ISO::areSitesEqual(const Basis& basis, const Atoms& origAtoms, const Atoms&
 	Vector3D tempPos;
 	Linked<Atom*>::iterator itPairNew = pairNew.begin();
 	Linked<Atom*>::iterator itPairOrig = pairOrig.begin();
+	double distError = 0.0;
+	double cumError = 0.0;
 	for (; itPairOrig != pairOrig.end(); ++itPairOrig, ++itPairNew)
 	{
 		
@@ -3146,7 +3148,28 @@ bool ISO::areSitesEqual(const Basis& basis, const Atoms& origAtoms, const Atoms&
 		ISO::moveIntoCell(tempPos);
 		
 		// Atoms are not within tolerance
-		if (basis.distance((*itPairOrig)->fractional(), FRACTIONAL, tempPos, FRACTIONAL) > tol)
+		distError = basis.distance((*itPairOrig)->fractional(), FRACTIONAL, tempPos, FRACTIONAL);
+		if (toltype == TT_DIST)
+		{
+			if (distError > tol)
+				return false;
+		}
+		else if (toltype == TT_RMSD)
+			cumError += distError * distError;
+		else if (toltype == TT_MEAN_DIST)
+			cumError += distError;
+	}
+	
+	if (toltype == TT_RMSD)
+	{
+		cumError /= error.length();
+		if (sqrt(cumError) > tol)
+			return false;
+	}
+	else if (toltype == TT_MEAN_DIST)
+	{
+		cumError /= error.length();
+		if (cumError > tol)
 			return false;
 	}
 	

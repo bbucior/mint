@@ -48,6 +48,8 @@ enum CenteringType {CT_UNKNOWN, CT_PRIMITIVE, CT_ONE_FACE, CT_BODY, CT_RHOMBOHED
 // Lattice centerings
 enum LatticeCentering {LC_UNKNOWN, LC_P, LC_H, LC_C, LC_A, LC_B, LC_I, LC_R, LC_F};
 
+// Error types for ISO::areSitesEqual tol
+enum TolType {TT_DIST, TT_RMSD, TT_MEAN_DIST};
 
 
 // Class containing information about basis vectors
@@ -343,7 +345,7 @@ public:
 	OList<Atom>::D2 shells(const Atom* atom, double maxDistance, double tol = 1e-4) const;
 	
 	// Compare to another structure
-	bool equivalent(const ISO& compISO, double tol, bool matchVolume = false, bool matchCellParams = true) const;
+	bool equivalent(const ISO& compISO, double tol, bool matchVolume = false, bool matchCellParams = true, TolType matchTolType = TT_DIST) const;
 	
 	// Set the space group
 	void spaceGroup(const Word& input)	{ _spaceGroup = input; }
@@ -372,7 +374,7 @@ public:
 	static void moveIntoCell(Vector3D& coordinates)
 		{ for (int i = 0; i < 3; ++i) moveIntoCell(coordinates[i]); }
 	static bool areSitesEqual(const Basis& basis, const Atoms& origAtoms, const Atoms& newAtoms, double tol, \
-		Vector3D* vector = 0, List<double>::D2* origDistances = 0);
+		Vector3D* vector = 0, List<double>::D2* origDistances = 0, TolType = TT_DIST);
 	static LatticePoints getLatticePoints(const Matrix3D& transformationToNewCell);
 	static Word system(LatticeSystem input);
 	static Word centering(LatticeCentering input);

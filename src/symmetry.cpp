@@ -605,7 +605,7 @@ bool Symmetry::checkOperation(const Rotation& rotation, const ISO& iso, double t
 			}
 
 			// Check if sites map
-			areEqual = ISO::areSitesEqual(iso.basis(), iso.atoms(), transAtoms, tol, &translation, distances);
+			areEqual = ISO::areSitesEqual(iso.basis(), iso.atoms(), transAtoms, tol, &translation, distances, TT_DIST);
 		}
 		
 		// Loop over processors

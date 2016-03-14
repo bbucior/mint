@@ -4522,6 +4522,7 @@ void Launcher::compare(Storage& data, const Function& function)
 	bool compareVolume = false;
 	bool compareCellParams = true;
 	bool compareFirst = false;
+	TolType compareTol = TT_DIST;
 	for (i = 0; i < function.arguments().length(); ++i)
 	{
 		if (function.arguments()[i].equal("volume", false, 3))
@@ -4532,6 +4533,12 @@ void Launcher::compare(Storage& data, const Function& function)
 			compareFirst = true;
 		if (function.arguments()[i].equal("triangle", false, 3))
 			compareFirst = false;
+		if (function.arguments()[i].equal("distance", false, 4))
+			compareTol = TT_DIST;
+		if (function.arguments()[i].equal("RMSD", false, 3))
+			compareTol = TT_RMSD;
+		if (function.arguments()[i].equal("meandist", false, 4))
+			compareTol = TT_MEAN_DIST;
 	}
 	
 	// Get the space groups of the structures if not comparing cell parameters
@@ -4591,7 +4598,7 @@ void Launcher::compare(Storage& data, const Function& function)
 			}
 			if (*areEqual.last())
 				*areEqual.last() = data.iso()[i].equivalent(data.iso()[j], Settings::value<double>(TOLERANCE), \
-					compareVolume, compareCellParams);
+					compareVolume, compareCellParams, compareTol);
 			
 			// Output
 			Output::decrease();
