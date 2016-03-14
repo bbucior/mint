@@ -529,7 +529,7 @@ private:
 	// Peak position parameters (see Pecharsky pg. 165)
 	double _shiftParameters[6];
 	// Peak broadening parameters (see: http://pd.chem.ucl.ac.uk/pdnn/refine1/rietveld.htm)
-	double _U, _V, _W;
+	double U, V, W;
 	// Mixing parameters for the psuedo-Voight function (see Perchasky pg. 171)
 	double _eta0, _eta1, _eta2;
 	// Angles at which intensities were measured in reference pattern
@@ -634,7 +634,7 @@ public:
 		Diffraction::clear();
 		_symmetry = 0;
 		_structure = 0;
-		_U = 0.0; _V = 0.0; _W = 0.3;
+		U = 0.0; V = 0.0; W = 0.3;
 		_eta0 = 0.5; _eta1 = 0.0; _eta2 = 0.0;
 		std::fill_n(_shiftParameters, 6, 0);
 		_backgroundParameters.clear();
@@ -648,7 +648,7 @@ public:
 		_minBFactor = 0.1;
 		_maxBFactor = 4.0;
 		_maxLatChange = 0.05;
-		_U = 0.0; _V = 0.0; _W = 0.3;
+		U = 0.0; V = 0.0; W = 0.3;
 		_eta0 = 0.5; _eta1 = 0.0; _eta2 = 0.0;
 		std::fill_n(_shiftParameters, 6, 0);
 		_numBackground = 5;
@@ -665,7 +665,7 @@ public:
 	 * <code> (u * tan(theta)^2 + v * tan(theta) + w) </code>
      */
 	void setPeakBroadeningParameters(double u, double v, double w) {
-		_U = u; _V = v; _W = w;
+		U = u; V = v; W = w;
 	}
 	
 	/**

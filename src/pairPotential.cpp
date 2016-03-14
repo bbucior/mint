@@ -475,7 +475,7 @@ void Buckingham::set(const Text& input) {
 	// Get C
 	if (!Language::isNumber(input[0][5]))
 		readError(input[1]);
-	_C = atof(input[0][5].array());
+	C = atof(input[0][5].array());
 
 	// Set cutoff
 	if (_cutoff == -1)
@@ -492,7 +492,7 @@ void Buckingham::set(const Text& input) {
 	Output::print(" Ang");
 	Output::newline();
 	Output::print("C: ");
-	Output::print(_C);
+	Output::print(C);
 	Output::print(" eV*Ang^6");
 	PairPotential::print();
 

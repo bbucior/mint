@@ -131,7 +131,7 @@ class Buckingham : public PairPotential
 	// Variables
 	double _A;
 	double _rho;
-	double _C;
+	double C;
 
 public:
 	
@@ -143,12 +143,12 @@ public:
 
 	// Evaluation functions
 	double pairEnergy(double distance) const
-		{ return _A * exp(-distance / _rho) - _C / pow(distance, 6); }
+		{ return _A * exp(-distance / _rho) - C / pow(distance, 6); }
 	double pairForce(double distance) const
-		{ return _A * exp(-distance / _rho) / _rho - 6 * _C / pow(distance, 7); }
+		{ return _A * exp(-distance / _rho) / _rho - 6 * C / pow(distance, 7); }
 	double tail(const ISO& iso, const Element& elem2) const
 		{
-			return -2 * _C * Constants::pi * density(iso, elem2) / (3 * pow(_cutoff, 3)) + 2 * _A * \
+			return -2 * C * Constants::pi * density(iso, elem2) / (3 * pow(_cutoff, 3)) + 2 * _A * \
 				exp(-_cutoff / _rho) * Constants::pi * density(iso, elem2) * (2 + _cutoff * pow(_rho, 3) * \
 				(2 + _cutoff / _rho) / _rho);
 		}		

@@ -318,7 +318,7 @@ void CalculatedPattern::rietveldRefinement(const Diffraction& referencePattern, 
     }
 	
 	// Refine the peak broadening (W)
-    _W = guessPeakWidthParameter(refAngles, refIntensities);
+    W = guessPeakWidthParameter(refAngles, refIntensities);
 	_currentlyRefining.insert(RF_WFACTOR);
     refinedSoFar.insert(RF_WFACTOR);
 	curR = runRefinement(&referencePattern, true);
@@ -326,7 +326,7 @@ void CalculatedPattern::rietveldRefinement(const Diffraction& referencePattern, 
     curR = runRefinement(&referencePattern, true);
 	Output::newline();
 	Output::print("Refined peak-broadening term to ");
-	Output::print(_W, 4);
+	Output::print(W, 4);
 	Output::print(" degrees. Current R: ");
 	Output::print(curR, 4);
     if (DIFFRACTION_EXCESSIVE_PRINTING) {
@@ -530,11 +530,11 @@ CalculatedPattern::column_vector CalculatedPattern::getRefinementParameters() {
         }
     }
 	if (willRefine(RF_UVFACTORS, _currentlyRefining)) {
-		params.push(_U); params.push(_V);
+		params.push(_U); params.push(V);
 		params.push(_eta1); params.push(_eta2);
 	}
 	if (willRefine(RF_WFACTOR, _currentlyRefining)) {
-		params.push(_W); params.push(_eta0);
+		params.push(W); params.push(_eta0);
 	}
     if (willRefine(RF_POSITIONS, _currentlyRefining)) {
         for (int orbit = 0; orbit < _symmetry->orbits().length(); orbit++)
@@ -712,13 +712,13 @@ void CalculatedPattern::setAccordingToParameters(column_vector params) {
         setBasis(newParams);
     }
 	if (willRefine(RF_UVFACTORS, _currentlyRefining)) {
-		_U = params(position++);
-		_V = params(position++);
+		U = params(position++);
+		V = params(position++);
 		_eta1 = params(position++);
 		_eta2 = params(position++);
 	}
 	if (willRefine(RF_WFACTOR, _currentlyRefining)) {
-		_W = params(position++); _eta0 = params(position++);
+		W = params(position++); _eta0 = params(position++);
 	}
     if (willRefine(RF_POSITIONS, _currentlyRefining)) {
         Vector newPositions(_symmetry->orbits().length()*3);
@@ -1074,8 +1074,8 @@ vector<double> CalculatedPattern::generatePeakSignal(vector<double>& twoTheta) c
 		double center = _reflections[p].getAngle();
 		double centerRad = _reflections[p].getAngleRadians();
 		// Compute peak-broadening terms
-		double H = _W + tan(centerRad / 2) 
-				* (_V + _U * tan(centerRad / 2));
+		double H = W + tan(centerRad / 2) 
+				* (V + U * tan(centerRad / 2));
 		H = sqrt(H);
 		
 		// Compute mixing parameters
