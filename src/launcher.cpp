@@ -4521,12 +4521,17 @@ void Launcher::compare(Storage& data, const Function& function)
 	int i;
 	bool compareVolume = false;
 	bool compareCellParams = true;
+	bool compareFirst = false;
 	for (i = 0; i < function.arguments().length(); ++i)
 	{
 		if (function.arguments()[i].equal("volume", false, 3))
 			compareVolume = true;
 		if (function.arguments()[i].equal("cell", false, 4))
 			compareCellParams = false;
+		if (function.arguments()[i].equal("first", false, 5))
+			compareFirst = true;
+		if (function.arguments()[i].equal("triangle", false, 3))
+			compareFirst = false;
 	}
 	
 	// Get the space groups of the structures if not comparing cell parameters
@@ -4541,12 +4546,24 @@ void Launcher::compare(Storage& data, const Function& function)
 		Output::decrease();
 	}
 	
+	// If several files present, determine if comparing with the first or all files
+	int compareLength;
+	if (compareFirst == false)
+	{
+		compareLength = data.iso().length();
+	}
+	else
+	{
+		compareLength = 1;
+	}
+	
 	// Loop over pairs of structures and compare them
 	int j;
 	Linked<int> origID;
 	Linked<int> compID;
 	Linked<bool> areEqual;
-	for (i = 0; i < data.iso().length(); ++i)
+	
+	for (i = 0; i < compareLength; ++i)
 	{
 		for (j = i + 1; j < data.iso().length(); ++j)
 		{
