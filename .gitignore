@@ -1,4 +1,7 @@
 dlib/
 TEMPBACKUP/
 obj/
+.codelite/
+mint.project
+mint.workspace
 

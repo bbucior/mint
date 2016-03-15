@@ -786,13 +786,23 @@ Two structures are considered the same only if they pass all tests. It may
 
 ######Arguments:
 - "volume" to compare the volumes of the primitive cells
+- "first" to compare all structures against the first in the file list: Structure 1 vs. 2, 1 vs. 3, ..., 1 vs. n
+- "triangle" to compare all input structures against one another in a triangular loop: Structure 1 vs. {2 through n}, 2 vs. {3 to n}, ..., n-1 vs. n
+- "distance" to test if the displacement of all atoms deviates less than tol in Test 6
+- "RMSD" to compare root-mean-square displacement of atoms in Test 6 instead of the maximum displacement, still against tol
+- "names" to reference structures in the output by filename instead of ID
 
-######Default: 
-Volumes are not compared
+######Defaults: 
+- Volumes are not compared
+- Compare all combinations of input structures (flag "triangle")
+- Structures deviate less than tol in Test 6 (flag "distance")
+- Output is formatted as "Structures # and # are [not] the same" based on the order of input arguments
 
 ######Examples:
     "mint str1 str2 -compare"     compare structures in str1 and str2
     "mint str1 str2 -compare vol" compare structures + volume in str1 and str2
+    "mint str1 str2 str3 -compare rmsd -tol 0.1" compare structures str1-str2, 1-3, 1-4, 2-3, 2-4, and 3-4, against an RMSD of 0.1 Angstroms in the final step
+    "mint str1 str2 str3 -compare first names" compare str1 against str2, and str1 against str3, using the filenames ("str2") in the output
 
 
 
