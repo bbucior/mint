@@ -4523,6 +4523,7 @@ void Launcher::compare(Storage& data, const Function& function)
 	bool compareCellParams = true;
 	bool compareFirst = false;
 	TolType compareTol = TT_DIST;
+	bool compareOutputName = false;
 	for (i = 0; i < function.arguments().length(); ++i)
 	{
 		if (function.arguments()[i].equal("volume", false, 3))
@@ -4539,6 +4540,8 @@ void Launcher::compare(Storage& data, const Function& function)
 			compareTol = TT_RMSD;
 		if (function.arguments()[i].equal("meandist", false, 4))
 			compareTol = TT_MEAN_DIST;
+		if (function.arguments()[i].equal("names", false, 4))
+			compareOutputName = true;
 	}
 	
 	// Get the space groups of the structures if not comparing cell parameters
@@ -4620,9 +4623,15 @@ void Launcher::compare(Storage& data, const Function& function)
 		// Print whether structures are the same
 		Output::newline();
 		Output::print("Structures ");
-		Output::print(*itOrigID);
+		if (compareOutputName)
+			Output::print(data.baseName()[(*itOrigID)-1]);
+		else
+			Output::print(*itOrigID);
 		Output::print(" and ");
-		Output::print(*itCompID);
+		if (compareOutputName)
+			Output::print(data.baseName()[(*itCompID)-1]);
+		else
+			Output::print(*itCompID);
 		Output::print(" are");
 		if (*itEqual == false)
 			Output::print(" not");
