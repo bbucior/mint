@@ -2545,7 +2545,7 @@ OList<Atom>::D2 ISO::shells(const Atom* atom, double maxDistance, double tol) co
 
 
 
-/* bool ISO::equivalent(const ISO& compISO, double tol, bool matchVolume, bool matchCellParams) const
+/* bool ISO::equivalent(const ISO& compISO, double tol, bool matchVolume, bool matchCellParams, TolType matchTolType) const
  *
  * Return whether two structures are the same
  */
@@ -3162,15 +3162,39 @@ bool ISO::areSitesEqual(const Basis& basis, const Atoms& origAtoms, const Atoms&
 	
 	if (toltype == TT_RMSD)
 	{
-		cumError /= error.length();
-		if (sqrt(cumError) > tol)
+		cumError = sqrt(cumError/error.length());
+		Output::newline();
+		Output::print("Comparison: RMSD of ");
+		Output::print(cumError);
+		if (cumError > tol)
+		{
+			Output::print(" is greater than tolerance of ");
+			Output::print(tol);
 			return false;
+		}
+		else
+		{
+			Output::print(" is less than tolerance of ");
+			Output::print(tol);
+		}
 	}
 	else if (toltype == TT_MEAN_DIST)
 	{
 		cumError /= error.length();
+		Output::newline();
+		Output::print("Comparison: Mean displacement of ");
+		Output::print(cumError);
 		if (cumError > tol)
+		{
+			Output::print(" is greater than tolerance of ");
+			Output::print(tol);
 			return false;
+		}
+		else
+		{
+			Output::print(" is less than tolerance of ");
+			Output::print(tol);
+		}
 	}
 	
 	// Update vector
